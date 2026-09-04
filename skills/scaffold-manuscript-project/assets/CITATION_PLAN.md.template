@@ -1,0 +1,45 @@
+# {{PROJECT_NAME}} Citation Plan
+
+This file records why a source may support a claim and where it would enter the manuscript. It does not replace `{{BIB_FILE}}`, and a row does not authorize citation insertion until identity, metadata, assumptions, and claim placement have been reviewed.
+
+## Current coverage
+
+No project-specific literature coverage has been established by the scaffold. Describe the focused topics that need primary-source support, existing coverage, likely attribution risks, and the search boundary required for any novelty statement.
+
+## Decision classes
+
+- **Inherited result:** Established in a declared antecedent and reused only within its assumptions.
+- **Transferable method:** Supplies a mathematical, experimental, or numerical method after conventions and boundary conditions are mapped.
+- **Context or constraint:** Supplies a physical prior, dataset, comparison, or limitation but not the active calculation.
+- **Candidate:** Identity, relevance, or claim coverage is not yet verified.
+- **Rejected or deferred:** Does not address the active regime, duplicates a better source, or cannot presently be transferred.
+
+## Source and coverage ledger
+
+| Source identity | Supported claim or method | Decision and manuscript destination | Assumption or transfer map | Verification performed | Open action |
+| --- | --- | --- | --- | --- | --- |
+| Not established | State one claim or method that needs support. | Candidate; location not established | Record conventions, regime, population, data, or method assumptions that must match. | None | Locate and verify an exact primary source. |
+
+## Rejected or deferred sources
+
+Record a source only when the reason for rejection or deferral will prevent weak attribution, invalid transfer, duplication, or repeated search effort. Preserve enough identity information to distinguish it from the selected source.
+
+## Placement rules
+
+- Prefer exact DOI, arXiv, report, dataset, or release identifiers.
+- Attach citations to the claims they support; one citation does not automatically support an entire paragraph.
+- Use original sources for original results when available, and reviews for synthesis or orientation.
+- Do not transfer a result across theories, conventions, profiles, datasets, boundary conditions, or statistical semantics without an explicit assumption map.
+- A novelty statement requires a documented search boundary and comparison with the closest primary work.
+- Discussion exports, search snippets, and bibliography metadata are not scientific evidence.
+
+## Bibliography gate
+
+Before editing `{{BIB_FILE}}`, verify exact title, authors, persistent identifier, version or release, source type, and duplicate identity. Record the intended claim and manuscript location in the ledger, confirm that assumptions transfer, then rebuild and inspect citation warnings.
+
+## Validation status
+
+- Citation-key coverage: Not established.
+- Duplicate DOI/arXiv or release audit: Not established.
+- Online source-identity verification: Not established.
+- LaTeX rebuild and warning review: Not established.

@@ -1,0 +1,10 @@
+#!/bin/bash
+# Review resource values and site policy before manual submission.
+#SBATCH --job-name=manuscript-verify
+#SBATCH --time=00:10:00
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=1G
+#SBATCH --output=verification/slurm-%j.out
+
+set -eu
+python3 verification/slurm_worker.py

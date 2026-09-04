@@ -1,0 +1,23 @@
+# Citation Plan
+
+This document records why sources are selected and where they support the manuscript. It does not replace the bibliography.
+
+## Coverage assessment
+
+Summarize the manuscript topics whose claims require literature support, then identify material gaps, overreliance on reviews, and claims that need original-source attribution.
+
+## Citation ledger
+
+| Key or identifier | Supported claim | Source role | Manuscript location | Assumption or transfer map | Selection rationale | Verification performed | Open decision |
+|---|---|---|---|---|---|---|---|
+
+## Rejected or deferred sources
+
+Record sources considered but not used when the reason will matter later, such as scope mismatch, superseded metadata, duplication, weak attribution, or uncertain identity.
+
+## Validation status
+
+- Offline citation-key coverage:
+- Duplicate DOI/arXiv audit:
+- Online identity verification:
+- LaTeX rebuild and warning review:

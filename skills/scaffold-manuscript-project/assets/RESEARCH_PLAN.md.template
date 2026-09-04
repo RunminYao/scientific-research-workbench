@@ -1,0 +1,53 @@
+# {{PROJECT_NAME}} Research Plan
+
+This file preserves durable research decisions across sessions. It is not a task database or a substitute for primary sources, derivations, code, configurations, verification, and the active manuscript.
+
+## Central question
+
+Replace this paragraph with one precise question identifying the scientific system, mechanism or method, regime, target observable or result, and the decision that different outcomes would change.
+
+## Current understanding
+
+- **Inherited results:** For each antecedent source or existing calculation, state the established result and its assumptions, not only a citation or title.
+- **Results established locally:** State completed project-specific derivations, computations, or validated conclusions with their evidence. Write `Not established` when none exist.
+- **Working hypotheses:** State each extrapolation, why it is plausible, and the calculation or observation that could falsify it.
+- **Genuinely unresolved questions:** Include only questions not already settled by antecedent work and explain why each answer matters.
+
+Keep benchmark reproduction and implementation validation separate from conceptual uncertainty. State the assumptions whose failure would justify reopening an inherited result.
+
+## Research boundary
+
+- **New scientific ingredient, regime, or observable:** Explain what changes relative to inherited work and what must now be determined.
+- **Completed antecedent work that should not be repeated:** Name settled results and how they enter as inputs or consistency conditions.
+- **Evidence that would change this boundary:** State the failed assumption, contradictory calculation, or new source that would justify reopening it.
+
+## Candidate routes
+
+When more than one scientifically distinct route could answer the central question or deliberately break a limiting assumption, state what physical possibility each route tests and what finding would make it more or less relevant. Omit this section when there is only one live route. Do not use it as a backlog of routine implementation variants.
+
+## Decisive results
+
+List the smallest literature result, derivation, benchmark, or computation that would materially change the research decision. For each item, state possible outcomes and what each would imply.
+
+## Active scientific work
+
+- **Literature:** Focused source question and why its answer matters.
+- **Derivation:** Relation or limiting case being tested and what it would clarify.
+- **Computation:** Scientific question tested by the benchmark or scan and how its outcome affects interpretation.
+- **Interpretation:** Observable or decision that consumes available evidence.
+
+Include only the modes of work that are currently useful; remove empty labels rather than implying that every project needs all four.
+
+## Decisions and implications
+
+Record only decisions whose rationale will matter later. For each, state the evidence, consequence for subsequent work, and result that would justify revisiting it.
+
+## Immediate next decision
+
+State the next scientific uncertainty, the most direct way currently available to resolve it, and how plausible outcomes would change the understanding or roadmap. This is not a session log, an artifact quota, or a list of routine implementation steps.
+
+## Update policy
+
+Update this file when the central question, candidate ordering, a durable hypothesis, a decisive pending result, or a research decision changes. Keep transient discussion, command logs, parameter dumps, and routine implementation details in their natural locations.
+
+When notes are chronological, apply later explicit user corrections before updating this file and preserve unresolved conflicts rather than blending them. Before initialization is complete, replace generic scientific prompts. If evidence is unavailable, write `Not established` and identify the required source check, derivation, computation, or verification.

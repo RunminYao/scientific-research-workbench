@@ -1,0 +1,2 @@
+# Direct dependencies of claim-bearing calculations.
+# Add and exactly pin packages only after the active scientific runtime is known.

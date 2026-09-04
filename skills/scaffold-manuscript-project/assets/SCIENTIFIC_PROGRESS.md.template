@@ -1,0 +1,34 @@
+# {{PROJECT_NAME}} Scientific Progress Discovery Index
+
+This compact index records durable results and stop/go decisions. It is not evidence. Search it first, load one matching topic packet, and then inspect the linked source or verifier.
+
+## Current state
+
+- `open/blocked`: No project-specific scientific result has been registered at initialization.
+
+## Evidence levels
+
+- `inherited`: established in an antecedent source and reused within its stated assumptions.
+- `verified`: reproduced by a registered project-local check for the named object.
+- `conditional`: a controlled decision inside declared inputs, grids, approximations, or stress assumptions.
+- `diagnostic`: useful for mechanism or engineering but not physically promotable.
+- `open/blocked`: required evidence or an admission condition is missing.
+- `superseded`: retained only to prevent reuse or repetition.
+
+## Topic map
+
+{{ROOT_PACKET_INDEX}}
+
+## Retained result catalogue
+
+| Result key | Evidence | Decision tag | Packet |
+| --- | --- | --- | --- |
+| `initialization` | open/blocked | No durable project-specific result | {{INITIAL_PACKET_LINK}} |
+
+## Stop and do-not-repeat decisions
+
+- None registered. Add an entry only when preserving its scope and rationale will prevent invalid reuse or costly repetition.
+
+## Maintenance contract
+
+Keep each decision tag to a short continue, stop, redirect, or open conclusion and route each result directly to one matching packet. Put assumptions, validity limits, non-claims, exact values, and authoritative evidence in that packet or its linked active sources and verifiers. Update a topic packet when a durable result, limitation, evidence route, or active gap changes; update this index only when discovery routing or a stop/go decision changes.

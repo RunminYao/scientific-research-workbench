@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Local worker entry point for a manually reviewed SLURM job."""
+
+
+def main() -> int:
+    print("Replace this placeholder with a deterministic, checkpointed worker.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

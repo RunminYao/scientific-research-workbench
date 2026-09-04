@@ -1,0 +1,27 @@
+\documentclass[aps,prd,preprint]{revtex4-2}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{cleveref}
+
+\begin{document}
+\title{Replace with a reviewed HEP or astrophysics title}
+\author{Replace with confirmed authors}
+
+\begin{abstract}
+State the question, method, verified result, and principal limitation only after confirmation.
+\end{abstract}
+
+\maketitle
+
+\input{sections/introduction}
+\input{sections/formalism}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+% Uncomment after adding and citing at least one reviewed bibliography entry.
+% \bibliographystyle{apsrev4-2}
+% \bibliography{references}
+
+\end{document}

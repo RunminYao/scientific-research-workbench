@@ -1,0 +1,17 @@
+# HEP/astrophysics profile
+
+## Scientific scope
+
+Replace this section with the confirmed system, regime, observable, and research decision.
+
+## Conventions and units
+
+Record metric signature, natural-unit choices, coordinate conventions, confidence-level conventions, and external data releases before deriving or comparing results.
+
+## Evidence boundary
+
+No scientific conclusion is prefilled. Link every retained result to a primary source, derivation, computation, or verification artifact.
+
+## Bibliography compatibility
+
+`paper/references.bib` accepts BibLaTeX fields. The default portable RevTeX 4.2 build uses BibTeX with `apsrev4-2`; review compatibility before adding BibLaTeX-only entry types.

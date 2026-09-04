@@ -1,0 +1,4 @@
+"""Reusable numerical and runtime primitives.
+
+Keep this layer independent of project models, workflows, and command-line interfaces.
+"""

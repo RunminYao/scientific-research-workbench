@@ -1,0 +1,2 @@
+# Plot-generation dependencies only; generated figures are not verification inputs.
+# Add and exactly pin a plotting stack only when an active figure workflow requires it.

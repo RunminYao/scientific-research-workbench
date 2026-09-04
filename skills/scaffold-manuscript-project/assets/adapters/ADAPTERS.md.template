@@ -1,0 +1,9 @@
+# Optional research-environment adapters
+
+These files are reviewable starting points. The scaffold does not install software, execute verification, submit SLURM jobs, or poll schedulers.
+
+Selected adapters: {{SELECTED_ADAPTERS}}.
+
+Run dependency checks with `python3 scripts/self_check.py --project-root PATH` from the plugin repository. Review every registered `[verification].default` command before using the runner's `--execute` option.
+
+SLURM is never registered as `sbatch`; submission remains a manual site-specific action.

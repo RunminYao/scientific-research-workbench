@@ -1,0 +1,9 @@
+\section{Formalism}
+\label{sec:formalism}
+
+% Define the mathematical or physical object, notation, conventions, units,
+% state space, boundary or initial data, approximation domain, and observable.
+% Separate inherited equations from project-local derivations.
+%
+% Claim gate: link nontrivial identities and limiting cases to a derivation
+% note or focused verifier before relying on them downstream.

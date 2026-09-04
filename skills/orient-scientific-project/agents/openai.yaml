@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orient Scientific Projects"
+  short_description: "Recover scientific mainlines and explain what matters"
+  default_prompt: "Use $orient-scientific-project to recover this project's evidence-backed mainline, explain consequential results, and place the current task in context."

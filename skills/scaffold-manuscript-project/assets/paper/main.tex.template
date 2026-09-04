@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{Replace with a reviewed scientific title}
+\author{Replace with confirmed authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+State the question, method, verified result, and principal limitation only after confirmation.
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/formalism}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+% Uncomment after adding and citing at least one reviewed bibliography entry.
+% \bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}

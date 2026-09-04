@@ -1,0 +1,9 @@
+\section{Methods}
+\label{sec:methods}
+
+% Describe the analytic, numerical, experimental, or inference procedure from
+% active inputs to the target result. Record configurations, provenance,
+% diagnostics, tolerances, convergence criteria, and failure handling.
+%
+% Claim gate: distinguish implementation tests from scientific validation and
+% require an independently motivated benchmark or limiting case.

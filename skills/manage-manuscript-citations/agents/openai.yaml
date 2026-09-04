@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Manuscript Citations"
+  short_description: "Fetch, validate, and maintain LaTeX citations"
+  default_prompt: "Use $manage-manuscript-citations to fetch or audit authoritative BibTeX and verify this manuscript's citation coverage."

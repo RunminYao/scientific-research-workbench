@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""Reviewable SymPy residual verifier; replace the placeholder identity."""
+
+try:
+    import sympy as sp
+except ImportError as exc:
+    raise SystemExit("SymPy adapter requires the optional 'sympy' package") from exc
+
+
+def main() -> int:
+    symbol = sp.symbols("x")
+    residual = sp.expand((symbol + 1) ** 2 - (symbol**2 + 2 * symbol + 1))
+    if residual != 0:
+        print(f"FAIL: residual={residual}")
+        return 1
+    print("PASS: replace the placeholder identity with the reviewed manuscript residual")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

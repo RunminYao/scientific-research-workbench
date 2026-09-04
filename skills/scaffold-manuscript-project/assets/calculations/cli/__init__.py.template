@@ -1,0 +1,4 @@
+"""Thin command-line adapters for scientific workflows.
+
+Parse user inputs here and delegate scientific work to the workflows layer.
+"""

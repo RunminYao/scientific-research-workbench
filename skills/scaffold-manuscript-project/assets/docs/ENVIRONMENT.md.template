@@ -1,0 +1,33 @@
+# {{PROJECT_NAME}} Python Environment
+
+Use Python 3.11 or newer in the repository-local `env/` virtual environment. Do not enable `--system-site-packages`; undeclared host packages are not part of project provenance.
+
+## Bootstrap and restore
+
+{{ENVIRONMENT_SETUP_GUIDANCE}}
+
+Do not upgrade pip as an unrelated initialization side effect. Package installation may access a configured index and must be an explicit, reviewed step.
+
+The requirement layers are:
+
+- `requirements-runtime.txt`: direct dependencies of claim-bearing calculations;
+- `requirements-verification.txt`: independent analytic, implementation-test, and bibliography-audit dependencies;
+- `requirements-plot.txt`: figure-generation dependencies;
+- `requirements.txt`: the complete default environment used by registered project commands.
+
+All three specialized layers are empty at initialization. Select packages from the actual calculation, verifier, profile, and adapter requirements, then pin exact versions after compatibility review. Put each direct dependency in the narrowest applicable layer. Transitive packages belong to the resolver unless their versions affect scientific behavior, numerical reproducibility, or file compatibility.
+
+## Verify
+
+```bash
+{{PROJECT_PYTHON}} verification/verify_all.py
+{{LATEX_BUILD_COMMAND}}
+```
+
+{{ADAPTER_GUIDANCE}}
+
+Do not add accelerators, distributed runtimes, checkpoint formats, dataframe libraries, notebooks, or workflow frameworks before a promoted calculation demonstrates the need. Environment creation and package installation are implementation setup, not scientific evidence.
+
+## Update policy
+
+Change selected packages and pins intentionally and in reviewable groups. Recreate the environment, run registered verification and the manuscript build, and record any numerical or file-format migration that can affect a result. Never infer that a dependency upgrade preserves scientific conclusions merely because imports succeed.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Derive Scientific Results"
+  short_description: "Derive results with explicit assumptions and checks"
+  default_prompt: "Use $derive-scientific-results to derive this result, state every operative assumption, and check limiting cases."

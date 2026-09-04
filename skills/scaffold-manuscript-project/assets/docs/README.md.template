@@ -1,0 +1,35 @@
+# {{PROJECT_NAME}} Documentation Map
+
+Start with [AGENTS.md](../AGENTS.md) for routing and [SCIENTIFIC_PROGRESS.md](../SCIENTIFIC_PROGRESS.md) for result discovery. Load [RESEARCH_PLAN.md](../RESEARCH_PLAN.md) only for priorities and task design, and the manuscript context at `{{CONTEXT_FILE}}` only for manuscript work.
+
+Use `$orient-scientific-project` to explain that bounded evidence route to a user or to prepare a cold-start brief for Codex or a subagent.
+
+{{RESEARCH_NOTICE_DOCS_GUIDANCE}}
+
+## Current context
+
+- [context/README.md](context/README.md) defines the two-hop packet contract and packet index.
+- [RESEARCH_PLAN.md](../RESEARCH_PLAN.md) records forward branches, decisive results, and redirect conditions.
+- Manuscript context: `{{CONTEXT_FILE}}`.
+- Profile conventions: {{PROFILE_CONVENTION_INDEX}}
+
+Available topic packets:
+
+{{DOCS_PACKET_INDEX}}
+
+Topic packets route to evidence; they are not evidence. Add a packet only when a durable result, stopped route, or evidence map no longer fits cleanly in the project overview.
+
+## Derivations and scientific inputs
+
+- [derivations/README.md](derivations/README.md) defines the role and evidence boundary for focused derivation notes.
+- [configs/README.md](../configs/README.md) defines when a versioned configuration becomes an active scientific input.
+- `manuscript-project.toml` records active paths, verification commands, inputs, generated-output provenance, and cross-artifact review rules.
+
+## Citation, computation, and verification
+
+- [CITATION_PLAN.md](../CITATION_PLAN.md) records claim-to-source rationale before bibliography insertion.
+- [ENVIRONMENT.md](ENVIRONMENT.md) defines the local Python environment and layered requirement contracts.
+- [calculations/README.md](../calculations/README.md) defines calculation-package boundaries and the promotion path for reusable or claim-bearing work.
+- [verification/README.md](../verification/README.md) separates structural checks from scientific result verification.
+
+Historical notes, discussion exports, generated plots, and build products should be linked only when they have a durable routing role. They do not become scientific evidence by appearing in this map.

@@ -1,0 +1,37 @@
+# Verification
+
+Run all currently registered project-local checks from the repository root:
+
+```bash
+{{PROJECT_PYTHON}} verification/verify_all.py
+```
+
+The initial suite verifies repository architecture, bounded context, manifest registration, manuscript includes, local links, and generated-artifact declarations. It does not verify a project-specific scientific result.
+
+## Scientific verifier contract
+
+A promoted verifier should:
+
+- recompute a named identity, value, benchmark, or convergence decision from active inputs;
+- declare conventions, units, assumptions, configuration, and tolerances;
+- avoid cached plots or arrays as authoritative inputs;
+- distinguish implementation behavior from the scientific claim;
+- fail nonzero with an actionable residual, predicate, or missing-input message;
+- remain deterministic when the scientific object permits, or declare seeds and stochastic acceptance semantics;
+- link to the consuming result entry, topic packet, calculation, and manuscript claim.
+
+Implementation unit tests may live beside calculation modules. Only focused project verifiers reviewed and explicitly added to the `VERIFIERS` allowlist in `verify_all.py` are run by the default project-level gate. Never add `verify_online_*` scripts there. Adapter checks such as the optional SymPy verifier are registered separately in `manuscript-project.toml`.
+
+## Structural versus scientific status
+
+`verify_context_architecture.py` checks whether the evidence-routing contract is internally consistent, including the complete recursive TeX include graph. `verify_all.py` initially runs only that reviewed structural verifier; newly promoted project verifiers require explicit allowlist review. A passing structural check says nothing about whether a formula, numerical result, external source, or interpretation is correct.
+
+## Manuscript build
+
+The registered manuscript build is:
+
+```bash
+{{LATEX_BUILD_COMMAND}}
+```
+
+Inspect compilation warnings, undefined references and citations, and the rendered PDF. Generated files under `verification/output/` and manuscript build directories are ignored and must not serve as scientific evidence inputs by default.

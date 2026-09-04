@@ -1,0 +1,613 @@
+#!/usr/bin/env python3
+"""Verify the manifest-driven research-context and manuscript routing contract."""
+
+from __future__ import annotations
+
+import re
+import sys
+import tomllib
+from pathlib import Path
+from typing import Any
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = PROJECT_ROOT / "manuscript-project.toml"
+DEFAULT_CONTEXT = ("AGENTS.md", "SCIENTIFIC_PROGRESS.md")
+DEFAULT_RESULT_INDEX_MAX_BYTES = 16 * 1024
+MAX_INCLUDE_DEPTH = 256
+STANDARD_PACKET_HEADINGS = (
+    "## Load when",
+    "## Established results",
+    "## Limits and non-claims",
+    "## Rejected or superseded routes",
+    "## Evidence routes",
+    "## Active gap",
+)
+REQUIRED_STATIC_PATHS = (
+    "AGENTS.md",
+    "RESEARCH_PLAN.md",
+    "SCIENTIFIC_PROGRESS.md",
+    "CITATION_PLAN.md",
+    "docs/README.md",
+    "docs/ENVIRONMENT.md",
+    "docs/context/README.md",
+    "docs/derivations/README.md",
+    "calculations/README.md",
+    "calculations/__init__.py",
+    "calculations/core/__init__.py",
+    "calculations/models/__init__.py",
+    "calculations/workflows/__init__.py",
+    "calculations/cli/__init__.py",
+    "configs/README.md",
+    "verification/README.md",
+    "verification/verify_all.py",
+    "verification/verify_context_architecture.py",
+    "requirements.txt",
+    "requirements-runtime.txt",
+    "requirements-verification.txt",
+    "requirements-plot.txt",
+)
+SIZE_LIMITS = {
+    "AGENTS.md": 24 * 1024,
+    "RESEARCH_PLAN.md": 24 * 1024,
+}
+LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\((<[^>]+>|[^)\s]+)\)")
+INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
+INCLUDE_RE = re.compile(r"\\(?:input|include)\s*\{([^}]+)\}")
+
+
+def fail(message: str) -> None:
+    raise AssertionError(message)
+
+
+def project_path(raw: str, field: str, *, allow_empty: bool = False) -> Path | None:
+    if not isinstance(raw, str):
+        fail(f"{field} must be a string")
+    if not raw:
+        if allow_empty:
+            return None
+        fail(f"{field} must not be empty")
+    relative = Path(raw)
+    if relative.is_absolute():
+        fail(f"{field} must be relative to the project root: {raw}")
+    resolved = (PROJECT_ROOT / relative).resolve()
+    try:
+        resolved.relative_to(PROJECT_ROOT)
+    except ValueError:
+        fail(f"{field} escapes the project root: {raw}")
+    return resolved
+
+
+def require_file(relative: str) -> str:
+    path = project_path(relative, "required path")
+    assert path is not None
+    if not path.is_file():
+        fail(f"required file is missing: {relative}")
+    return path.read_text(encoding="utf-8")
+
+
+def require_table(data: dict[str, Any], name: str) -> dict[str, Any]:
+    value = data.get(name)
+    if not isinstance(value, dict):
+        fail(f"manifest [{name}] must be a table")
+    return value
+
+
+def positive_int(raw: Any, name: str) -> int:
+    if not isinstance(raw, int) or isinstance(raw, bool) or raw <= 0:
+        fail(f"{name} must be a positive integer")
+    return raw
+
+
+def load_manifest() -> dict[str, Any]:
+    if not MANIFEST.is_file():
+        fail("required file is missing: manuscript-project.toml")
+    value = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        fail("manifest root must be a table")
+    return value
+
+
+def check_command_group(raw: Any) -> tuple[tuple[str, ...], ...]:
+    if not isinstance(raw, list) or not raw:
+        fail("verification.default must be a nonempty array of command arrays")
+    commands: list[tuple[str, ...]] = []
+    for index, command in enumerate(raw):
+        if (
+            not isinstance(command, list)
+            or not command
+            or not all(isinstance(item, str) and item for item in command)
+        ):
+            fail(f"verification.default[{index}] must be a nonempty string array")
+        commands.append(tuple(command))
+    if not any("verification/verify_all.py" in command for command in commands):
+        fail("verification.default does not register verification/verify_all.py")
+    return tuple(commands)
+
+
+def check_manifest(
+    data: dict[str, Any],
+) -> tuple[str, str, str, tuple[str, ...], int, int, tuple[str, ...]]:
+    manuscript = require_table(data, "manuscript")
+    context = require_table(data, "context")
+    verification = require_table(data, "verification")
+    artifacts = require_table(data, "artifacts")
+
+    root_tex = manuscript.get("root_tex")
+    bibliography = manuscript.get("bibliography", "")
+    if not isinstance(root_tex, str) or not isinstance(bibliography, str):
+        fail("manuscript.root_tex and manuscript.bibliography must be strings")
+    root_path = project_path(root_tex, "manuscript.root_tex")
+    assert root_path is not None
+    if not root_path.is_file():
+        fail(f"registered root TeX is missing: {root_tex}")
+    bibliography_path = project_path(
+        bibliography, "manuscript.bibliography", allow_empty=True
+    )
+    if bibliography_path is not None and not bibliography_path.is_file():
+        fail(f"registered bibliography is missing: {bibliography}")
+
+    context_docs = manuscript.get("context_docs")
+    if not isinstance(context_docs, list) or not all(
+        isinstance(item, str) for item in context_docs
+    ):
+        fail("manuscript.context_docs must be a string array")
+    if tuple(context_docs) != DEFAULT_CONTEXT:
+        fail(
+            "manuscript.context_docs must be exactly "
+            f"{DEFAULT_CONTEXT}, found {tuple(context_docs)}"
+        )
+
+    if context.get("result_index") != "SCIENTIFIC_PROGRESS.md":
+        fail("context.result_index must be SCIENTIFIC_PROGRESS.md")
+    packets_raw = context.get("packets")
+    if (
+        not isinstance(packets_raw, list)
+        or not packets_raw
+        or not all(isinstance(item, str) and item for item in packets_raw)
+    ):
+        fail("context.packets must be a nonempty string array")
+    packets = tuple(packets_raw)
+    if len(packets) != len(set(packets)):
+        fail("context.packets contains duplicates")
+    headings = context.get("required_packet_headings")
+    normalized_headings = tuple(headings) if isinstance(headings, list) else ()
+    if normalized_headings != STANDARD_PACKET_HEADINGS:
+        fail("context.required_packet_headings does not match the packet contract")
+    positive_int(
+        context.get("default_context_max_bytes"),
+        "context.default_context_max_bytes",
+    )
+    packet_limit = positive_int(
+        context.get("packet_max_bytes"),
+        "context.packet_max_bytes",
+    )
+    result_index_limit = positive_int(
+        context.get("result_index_max_bytes", DEFAULT_RESULT_INDEX_MAX_BYTES),
+        "context.result_index_max_bytes",
+    )
+
+    check_command_group(verification.get("default"))
+    inputs = verification.get("inputs")
+    if not isinstance(inputs, list) or not all(
+        isinstance(item, str) and item for item in inputs
+    ):
+        fail("verification.inputs must be a string array")
+    if len(inputs) != len(set(inputs)):
+        fail("verification.inputs contains duplicates")
+    required_inputs = set(REQUIRED_STATIC_PATHS)
+    context_file = (
+        root_path.parent / "MANUSCRIPT_CONTEXT.md"
+    ).relative_to(PROJECT_ROOT).as_posix()
+    required_inputs.update({root_tex, context_file})
+    if bibliography:
+        required_inputs.add(bibliography)
+    missing_inputs = sorted(required_inputs.difference(inputs))
+    if missing_inputs:
+        fail(f"verification.inputs omits required active paths: {missing_inputs}")
+    for index, relative in enumerate(inputs):
+        path = project_path(relative, f"verification.inputs[{index}]")
+        assert path is not None
+        if not path.exists():
+            fail(f"registered verification input is missing: {relative}")
+
+    check_generated_artifacts(artifacts.get("generated"))
+    return (
+        root_tex,
+        bibliography,
+        context_file,
+        packets,
+        packet_limit,
+        result_index_limit,
+        tuple(inputs),
+    )
+
+
+def check_generated_artifacts(raw: Any) -> None:
+    if not isinstance(raw, list):
+        fail("artifacts.generated must be an array")
+    seen_outputs: set[str] = set()
+    for index, entry in enumerate(raw):
+        if not isinstance(entry, dict) or set(entry) != {"source", "outputs"}:
+            fail(
+                "each artifacts.generated entry must contain exactly "
+                "source and outputs"
+            )
+        source = entry["source"]
+        outputs = entry["outputs"]
+        source_path = project_path(source, f"artifacts.generated[{index}].source")
+        assert source_path is not None
+        if not source_path.is_file():
+            fail(f"generated-artifact source is missing: {source}")
+        if (
+            not isinstance(outputs, list)
+            or not outputs
+            or not all(isinstance(item, str) and item for item in outputs)
+        ):
+            fail(f"artifacts.generated[{index}].outputs must be a nonempty string array")
+        for output_index, output in enumerate(outputs):
+            project_path(
+                output,
+                f"artifacts.generated[{index}].outputs[{output_index}]",
+            )
+            if output == source:
+                fail(f"generated artifact cannot overwrite its source: {source}")
+            if output in seen_outputs:
+                fail(f"generated output is declared more than once: {output}")
+            seen_outputs.add(output)
+
+
+def check_required_files(context_file: str) -> None:
+    for relative in REQUIRED_STATIC_PATHS:
+        require_file(relative)
+    require_file(context_file)
+
+
+def check_sizes(
+    context_file: str,
+    packets: tuple[str, ...],
+    packet_limit: int,
+    result_index_limit: int,
+    data: dict[str, Any],
+) -> None:
+    limits = {
+        **SIZE_LIMITS,
+        "SCIENTIFIC_PROGRESS.md": result_index_limit,
+        context_file: 24 * 1024,
+    }
+    for relative, limit in limits.items():
+        path = project_path(relative, "size-limited path")
+        assert path is not None
+        if path.stat().st_size > limit:
+            fail(f"{relative} exceeds its {limit}-byte limit")
+    context_docs = data["manuscript"]["context_docs"]
+    total = sum(
+        (project_path(relative, "manuscript.context_docs") or PROJECT_ROOT).stat().st_size
+        for relative in context_docs
+    )
+    context_limit = data["context"]["default_context_max_bytes"]
+    if total > context_limit:
+        fail(f"default context is {total} bytes, above its {context_limit}-byte limit")
+    for relative in packets:
+        path = project_path(relative, "context packet")
+        assert path is not None
+        if path.stat().st_size > packet_limit:
+            fail(f"{relative} exceeds its {packet_limit}-byte packet limit")
+
+
+def check_packet_contract(packets: tuple[str, ...]) -> None:
+    actual = tuple(
+        path.relative_to(PROJECT_ROOT).as_posix()
+        for path in sorted((PROJECT_ROOT / "docs/context").glob("*.md"))
+        if path.name != "README.md"
+    )
+    if tuple(sorted(packets)) != actual:
+        fail(f"topic-packet files differ from the manifest: {actual}")
+    progress = require_file("SCIENTIFIC_PROGRESS.md")
+    packet_index = require_file("docs/context/README.md")
+    for relative in packets:
+        path = project_path(relative, "context packet")
+        assert path is not None
+        if path.parent != (PROJECT_ROOT / "docs/context").resolve():
+            fail(f"topic packet must live directly under docs/context: {relative}")
+        text = require_file(relative)
+        positions = []
+        for heading in STANDARD_PACKET_HEADINGS:
+            position = text.find(heading)
+            if position < 0:
+                fail(f"{relative} is missing required heading {heading!r}")
+            positions.append(position)
+        if positions != sorted(positions):
+            fail(f"{relative} does not use the required heading order")
+        if path.name not in progress:
+            fail(f"SCIENTIFIC_PROGRESS.md does not route topic packet {path.name}")
+        if path.name not in packet_index:
+            fail(f"docs/context/README.md does not route topic packet {path.name}")
+
+
+def check_entry_roles(context_file: str) -> None:
+    required = {
+        "AGENTS.md": (
+            "## Two-hop context protocol",
+            "## Project orientation and research notices",
+            "## Scientific invariants",
+            "## Build and validation",
+        ),
+        "SCIENTIFIC_PROGRESS.md": (
+            "## Topic map",
+            "## Retained result catalogue",
+            "## Stop and do-not-repeat decisions",
+        ),
+        "RESEARCH_PLAN.md": (
+            "## Central question",
+            "## Decisive results",
+            "## Immediate next decision",
+        ),
+        context_file: (
+            "## Include order",
+            "## Section guide",
+        ),
+        "CITATION_PLAN.md": (
+            "## Source and coverage ledger",
+            "## Bibliography gate",
+        ),
+        "docs/README.md": (
+            "## Current context",
+            "## Citation, computation, and verification",
+        ),
+    }
+    for relative, headings in required.items():
+        text = require_file(relative)
+        for heading in headings:
+            if heading not in text:
+                fail(f"{relative} is missing role-defining heading {heading!r}")
+    manuscript_context = require_file(context_file)
+    claim_status_headings = (
+        "## Claim status and evidence",
+        "## Claim-readiness gates",
+    )
+    if not any(heading in manuscript_context for heading in claim_status_headings):
+        fail(
+            f"{context_file} is missing role-defining heading "
+            "'## Claim status and evidence' (legacy "
+            "'## Claim-readiness gates' is also accepted)"
+        )
+
+
+def strip_tex_comments(text: str) -> str:
+    clean_lines: list[str] = []
+    for line in text.splitlines():
+        for index, char in enumerate(line):
+            if char != "%":
+                continue
+            backslashes = 0
+            cursor = index - 1
+            while cursor >= 0 and line[cursor] == "\\":
+                backslashes += 1
+                cursor -= 1
+            if backslashes % 2 == 0:
+                line = line[:index]
+                break
+        clean_lines.append(line)
+    return "\n".join(clean_lines)
+
+
+def resolve_manuscript_include(
+    raw_target: str,
+    source: Path,
+    root_tex_directory: Path,
+) -> Path:
+    token = raw_target.strip()
+    source_relative = source.relative_to(PROJECT_ROOT).as_posix()
+    if not token:
+        fail(f"empty manuscript include in {source_relative}")
+    relative = Path(token)
+    if relative.is_absolute():
+        fail(f"manuscript include escapes the project root in {source_relative}: {token}")
+    if not relative.suffix:
+        relative = relative.with_suffix(".tex")
+
+    candidates: list[Path] = []
+    has_in_project_candidate = False
+    for base in (source.parent, root_tex_directory, PROJECT_ROOT):
+        candidate = (base / relative).resolve()
+        if candidate in candidates:
+            continue
+        candidates.append(candidate)
+        try:
+            candidate.relative_to(PROJECT_ROOT)
+        except ValueError:
+            continue
+        has_in_project_candidate = True
+        if candidate.is_file():
+            return candidate
+
+    if not has_in_project_candidate:
+        fail(f"manuscript include escapes the project root in {source_relative}: {token}")
+    fail(f"unresolved manuscript include in {source_relative}: {token}")
+
+
+def manuscript_include_graph(root_tex: str) -> tuple[str, ...]:
+    root_path = project_path(root_tex, "manuscript.root_tex")
+    assert root_path is not None
+    root_tex_directory = root_path.parent
+    active: list[Path] = []
+    visited: set[Path] = set()
+    ordered: list[str] = []
+
+    def visit(source: Path) -> None:
+        if source in active:
+            cycle_start = active.index(source)
+            cycle = (*active[cycle_start:], source)
+            display = " -> ".join(
+                path.relative_to(PROJECT_ROOT).as_posix() for path in cycle
+            )
+            fail(f"manuscript include cycle: {display}")
+        if source in visited:
+            return
+        if len(active) >= MAX_INCLUDE_DEPTH:
+            relative = source.relative_to(PROJECT_ROOT).as_posix()
+            fail(f"manuscript include depth exceeds {MAX_INCLUDE_DEPTH}: {relative}")
+        active.append(source)
+        ordered.append(source.relative_to(PROJECT_ROOT).as_posix())
+        clean = strip_tex_comments(source.read_text(encoding="utf-8"))
+        for token in INCLUDE_RE.findall(clean):
+            visit(resolve_manuscript_include(token, source, root_tex_directory))
+        active.pop()
+        visited.add(source)
+
+    visit(root_path)
+    return tuple(ordered)
+
+
+def context_declared_paths(context_file: str) -> set[str]:
+    context_path = project_path(context_file, "manuscript context")
+    assert context_path is not None
+    context = require_file(context_file)
+    declared: set[str] = set()
+
+    for raw_target in LINK_RE.findall(context):
+        target = local_link_target(context_path, raw_target)
+        if target is not None and target.is_file():
+            declared.add(target.relative_to(PROJECT_ROOT).as_posix())
+
+    for raw_target in INLINE_CODE_RE.findall(context):
+        token = raw_target.strip()
+        if not token or "://" in token:
+            continue
+        relative = Path(token)
+        if relative.is_absolute():
+            continue
+        for base in (PROJECT_ROOT, context_path.parent):
+            candidate = (base / relative).resolve()
+            try:
+                project_relative = candidate.relative_to(PROJECT_ROOT)
+            except ValueError:
+                continue
+            if candidate.is_file():
+                declared.add(project_relative.as_posix())
+    return declared
+
+
+def check_manuscript_includes(
+    root_tex: str,
+    context_file: str,
+    verification_inputs: tuple[str, ...],
+) -> None:
+    graph = manuscript_include_graph(root_tex)
+    missing_inputs = sorted(set(graph).difference(verification_inputs))
+    if missing_inputs:
+        fail(
+            "verification.inputs omits files from the recursive manuscript "
+            f"include graph: {missing_inputs}"
+        )
+    declared = context_declared_paths(context_file)
+    missing_context = sorted(set(graph).difference(declared))
+    if missing_context:
+        fail(
+            f"{context_file} does not map recursive manuscript files by "
+            f"relative path: {missing_context}"
+        )
+
+
+def local_link_target(document: Path, raw_target: str) -> Path | None:
+    target = (
+        raw_target[1:-1]
+        if raw_target.startswith("<") and raw_target.endswith(">")
+        else raw_target
+    )
+    target = target.split("#", maxsplit=1)[0]
+    if not target or "://" in target or target.startswith(("mailto:", "data:")):
+        return None
+    resolved = (document.parent / target).resolve()
+    try:
+        resolved.relative_to(PROJECT_ROOT)
+    except ValueError:
+        fail(f"local link escapes the project root: {raw_target}")
+    return resolved
+
+
+def check_local_links(context_file: str, packets: tuple[str, ...]) -> None:
+    documents = (
+        "AGENTS.md",
+        "SCIENTIFIC_PROGRESS.md",
+        "RESEARCH_PLAN.md",
+        context_file,
+        "CITATION_PLAN.md",
+        "docs/README.md",
+        "docs/ENVIRONMENT.md",
+        "docs/context/README.md",
+        "docs/derivations/README.md",
+        "calculations/README.md",
+        "configs/README.md",
+        "verification/README.md",
+        *packets,
+    )
+    for relative in documents:
+        document = project_path(relative, "linked document")
+        assert document is not None
+        text = require_file(relative)
+        for raw_target in LINK_RE.findall(text):
+            target = local_link_target(document, raw_target)
+            if target is not None and not target.exists():
+                fail(f"broken local link in {relative}: {raw_target}")
+
+
+def main() -> int:
+    try:
+        data = load_manifest()
+        (
+            root_tex,
+            _bibliography,
+            context_file,
+            packets,
+            packet_limit,
+            result_index_limit,
+            verification_inputs,
+        ) = (
+            check_manifest(data)
+        )
+        check_required_files(context_file)
+        check_sizes(
+            context_file,
+            packets,
+            packet_limit,
+            result_index_limit,
+            data,
+        )
+        check_packet_contract(packets)
+        check_entry_roles(context_file)
+        check_manuscript_includes(root_tex, context_file, verification_inputs)
+        check_local_links(context_file, packets)
+    except (AssertionError, KeyError, OSError, TypeError, tomllib.TOMLDecodeError) as exc:
+        print(f"FAIL: context architecture: {exc}", file=sys.stderr)
+        return 1
+    context_docs = data["manuscript"]["context_docs"]
+    total = sum(
+        (project_path(relative, "manuscript.context_docs") or PROJECT_ROOT).stat().st_size
+        for relative in context_docs
+    )
+    limit = data["context"]["default_context_max_bytes"]
+    result_index_size = (
+        project_path("SCIENTIFIC_PROGRESS.md", "context.result_index") or PROJECT_ROOT
+    ).stat().st_size
+    largest_packet_size, largest_packet = max(
+        (
+            (project_path(relative, "context packet") or PROJECT_ROOT).stat().st_size,
+            relative,
+        )
+        for relative in packets
+    )
+    print(
+        "PASS: context architecture "
+        f"({len(packets)} topic packet(s); "
+        f"result index {result_index_size}/{result_index_limit} bytes; "
+        f"default context {total}/{limit} bytes; "
+        f"largest packet {largest_packet} "
+        f"{largest_packet_size}/{packet_limit} bytes)"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

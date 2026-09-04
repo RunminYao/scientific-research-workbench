@@ -1,0 +1,4 @@
+interface:
+  display_name: "Calibrate Scientific Evidence"
+  short_description: "Match physical claims, assumptions, and rigor"
+  default_prompt: "Use $calibrate-scientific-evidence to distinguish the physical claim, mathematical theorem, and implementation checks, then choose the smallest decision-changing research route."

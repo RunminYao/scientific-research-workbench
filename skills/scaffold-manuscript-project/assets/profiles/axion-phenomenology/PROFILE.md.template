@@ -1,0 +1,129 @@
+# Axion phenomenology profile
+
+Use this file as the project's explicit scientific-input contract. Replace every `Not established` entry needed by the active calculation with a value, convention, uncertainty, validity range, and evidence route. Do not treat this starter as a source or as a scientific result.
+
+## Scope and model identity
+
+- Target theory: **Not established.** State whether each particle is a QCD axion, a generic axion-like particle (ALP), or another pseudoscalar. Do not impose the QCD mass--decay-constant relation on a generic ALP.
+- Parameter basis: **Not established.** List the sampled and derived parameters, their reference or renormalization scale, and all fixed interactions. Say whether photon, electron, nucleon, gluon, flavor-changing, and self-couplings are present.
+- Field content and population: **Not established.** Distinguish one species from multiple axions, the mass and interaction basis, mixing terms, the dark-matter fraction of each species, and any assumed background occupation or coherence.
+- Observable and decision: **Not established.** Name the source, propagation environment, detector observable, and the result that would change the scientific conclusion before optimizing an intermediate quantity.
+
+## Natural units and electromagnetic conversions
+
+- Natural-unit convention: **Not established.** Record whether \(\hbar=c=k_B=1\), which quantities remain dimensional, and the base energy and length units used by code, tables, and plots.
+- Electromagnetic unit system: **Not established.** State Heaviside--Lorentz, Gaussian, or SI; whether it is rationalized; the definition of \(\alpha\) and electric charge; and the normalization of \(F_{\mu\nu}\), \(\widetilde F^{\mu\nu}\), \(\mathbf E\), and \(\mathbf B\).
+- Conversion table: **Not established.** Record the adopted eV/GeV, length, time, frequency, temperature, magnetic-field, energy-density, and luminosity conversions with source, precision, and direction of conversion. Include an independent dimensional check such as magnetic energy density or a known benchmark.
+- Code boundary: **Not established.** Identify exactly where SI/cgs inputs enter and where they are converted. Do not scatter conversion constants across analysis scripts.
+
+## Metric, Fourier, and polarization conventions
+
+- Spacetime: **Not established.** Record metric signature, coordinate order, Levi--Civita normalization, dual-tensor definition, and covariant-derivative sign.
+- Fourier transform: **Not established.** Record forward and inverse kernels, normalization factors, the \(e^{-i\omega t}\) or \(e^{+i\omega t}\) choice, momentum-flow convention, and the relation between temporal, spatial, and ray/WKB evolution.
+- Photon basis: **Not established.** Define propagation direction, transverse basis vectors, magnetic-field angle, polarization vectors, and how the basis rotates between domains or sky coordinates.
+- Stokes and helicity: **Not established.** Define \(I,Q,U,V\) from amplitudes or the density matrix, the sign of circular polarization, handedness viewed toward or away from the source, and the rotation law for \(Q\pm iU\). Record any IAU, IEEE, CMB, or instrument convention conversion.
+- Initial state: **Not established.** Give the normalized amplitude or density matrix, incident axion occupation and coherences, primordial polarization, and every ensemble average.
+
+## Axion-photon coupling definitions
+
+- Interaction Lagrangian: **Not established.** Write the exact coefficient and sign multiplying \(aF_{\mu\nu}\widetilde F^{\mu\nu}\) and the resulting \(a\mathbf E\cdot\mathbf B\) term under the declared conventions.
+- \(g_{a\gamma\gamma}\): **Not established.** Define the symbol, units, sign, absolute-value convention used in limits, and whether an alternate \(g_{a\gamma}\) denotes the same quantity.
+- \(C_{a\gamma}\): **Not established.** Write the exact relation among \(g_{a\gamma\gamma}\), \(C_{a\gamma}\), \(f_a\), and \(\alpha\), including normalization and scale.
+- \(E/N\): **Not established.** Define the electromagnetic and color anomaly coefficients and their normalization. State how \(E/N\) enters \(C_{a\gamma}\), and identify the source and QCD inputs for the model-independent contribution rather than silently fixing a rounded constant.
+- Model map: **Not established.** State whether benchmark bands or model lines are KSVZ, DFSZ, photophilic, nucleophilic, clockwork/alignment, or a project-specific UV completion, and record which couplings are correlated rather than independently variable.
+
+## QCD mass--decay-constant relation
+
+- Zero-temperature relation: **Not established.** Record the adopted \(m_a f_a\) relation through the topological susceptibility \(\chi(0)\), including numerical input, uncertainty, source, and the definition of \(f_a\) versus the Peccei--Quinn scale and domain-wall number.
+- Low-energy inputs: **Not established.** Record quark-mass ratios, pion inputs, chiral order, lattice-QCD result or interpolation, renormalization scheme/scale where relevant, and propagated correlations.
+- Temperature dependence: **Not established.** Give \(\chi(T)\) or \(m_a(T)\), interpolation and matching temperatures, uncertainty treatment, and the regime where the chosen fit is valid.
+- ALP exception: For a generic ALP, keep \(m_a\) and \(f_a\) or \(g_{a\gamma\gamma}\) independent unless a stated model relates them.
+
+## Local dark matter and phase space
+
+- Density: **Not established.** Record the total local dark-matter density, axion fraction, spatial profile or measurement volume, uncertainty/distribution, correlations, and source. Distinguish a local value from a Galactic or cosmological mean.
+- Velocity model: **Not established.** Name the Galactic-frame distribution and lab-frame transform; define circular speed, dispersion convention, escape speed, solar peculiar motion, Earth motion, truncation/normalization, and time dependence.
+- Nonstandard structure: **Not established.** Record streams, debris flow, miniclusters, solitons, gravitational focusing, anisotropy, substructure encounter probabilities, or explicitly state that they are excluded from scope.
+- Field statistics: **Not established.** Define occupation number, random phases, amplitude distribution, coherence length and time including every \(2\pi\) convention, and the conditions under which a classical stochastic field is justified.
+- Signal line shape: **Not established.** Map the phase-space distribution to frequency, linewidth, quality factor, temporal correlations, annual/daily modulation, and analysis bins without assuming a Maxwellian line when a different population is used.
+
+## Cosmological history and abundance
+
+- Peccei--Quinn history: **Not established.** State whether symmetry breaking occurs before or after inflation, whether reheating restores it, the inflationary scale assumptions, and which patch-to-patch distribution is relevant.
+- Misalignment: **Not established.** Record the initial angle or its distribution, anharmonic correction, onset criterion, temperature-dependent mass, adiabatic invariants, entropy dilution, early matter domination, kination, or other nonstandard expansion.
+- Defects: **Not established.** State whether strings and domain walls contribute, the domain-wall number and network-decay prescription, simulation calibration and uncertainty, or why defect production is absent.
+- Perturbations and bounds: **Not established.** Record isocurvature, non-Gaussianity, dark radiation, structure-formation, black-hole/superradiance, stellar-cooling, supernova, BBN, CMB, and reionization assumptions only when applicable to the declared model.
+- Abundance semantics: **Not established.** Distinguish all dark matter, a fixed fraction, an upper abundance, and a likelihood-sampled abundance. Do not rescale a constraint by an axion fraction unless the observable's scaling and population response justify it.
+
+## Media, propagation, and averaging
+
+- Environment: **Not established.** Record electron and neutral densities, plasma frequency convention, magnetic-field amplitude and orientation, gradients, turbulence, QED vacuum term, absorption/scattering, gravitational background, geometry, redshift, and co-location evidence.
+- State evolution: **Not established.** Specify the complete amplitude or density-matrix basis and Hamiltonian or kinetic equation. When polarization matters, retain the photon polarizations and relevant axion coherences rather than inferring Stokes observables from conversion probability alone.
+- Averaging order: **Not established.** Separate physical ensemble averages, phase decoherence, magnetic domains, spatial/temporal sampling, frequency bandpass, beam, exposure, and numerical quadrature. Average propagated states, density matrices, or observable fields at the physical layer defined by the model; an averaged Hamiltonian is not generally equivalent.
+- Dissipation: **Not established.** Identify nonunitary collision, absorption, emission, or Lindblad terms. Do not use a unitary projection or probability-conservation repair on a dissipative map.
+
+## Statistical semantics
+
+- Reported object: **Not established.** Label every interval as a frequentist confidence interval/limit, likelihood contour, profile-likelihood result, Bayesian credible interval, posterior density, expected sensitivity, discovery reach, or forecast.
+- Confidence level: **Not established.** Record the percentage, one- or two-sided construction, ordering rule or test statistic, asymptotic or Monte Carlo calibration, physical boundary treatment, power constraint, and expected bands.
+- Likelihood: **Not established.** Identify the data vector, covariance, nuisance parameters, correlations, systematics, profiling/marginalization, data combinations, and goodness-of-fit diagnostics.
+- Posterior: **Not established.** Record priors and parameterization, bounds and Jacobians, sampler/evidence settings, convergence diagnostics, and whether plotted regions are equal-tail, highest-posterior-density, or another construction.
+- Searches: **Not established.** Record local versus global significance, trial factors/look-elsewhere effect, candidate selection and rescans, blinding, upper-limit behavior near zero, and whether exclusions use observed or Asimov data.
+- Reinterpretation: Do not read a published confidence contour as a posterior, combine curves with incompatible nuisance assumptions, or infer likelihood values from a plot without a validated release or digitization procedure.
+
+## Experimental data and apparatus
+
+- Data release: **Not established.** Record experiment, run and release/version, DOI or persistent URL, files and checksums, calibration epoch, cuts, livetime, blinded regions, errata, and any private-to-public transformation.
+- Magnet and geometry: **Not established.** Record magnetic-field map and convention, peak and volume-averaged field, effective volume, bore/aperture, length, orientation, fringe fields, field-off data, and the uncertainty/correlation model. A quoted \(B^2V\) does not replace the field-mode overlap integral.
+- Resonator: **Not established.** Record mode, resonant frequency and tuning range, unloaded/internal and loaded quality factors, coupling coefficient, bandwidth, mode crossings, cavity temperature, and whether signal power uses \(\min(Q_L,Q_a)\) or a resolved convolution.
+- Form factor: **Not established.** Write the normalized overlap integral, field and mode maps, volume convention, dielectric or multi-cell treatment, simulation/measurement source, frequency dependence, and uncertainty.
+- Receiver and scan: **Not established.** Record gain and transfer functions, quantum efficiency, system/noise temperature convention, calibration injections, digitization, filters, scan step and dwell time, duty cycle, rescan policy, candidate thresholds, and injected-signal recovery.
+- Signal model: **Not established.** State the power or count-rate normalization, polarization/orientation response, phase-space line shape, coherence assumptions, axion fraction, analysis efficiency, bin correlations, and nuisance parameters used by the released likelihood or recast.
+- Other experiment classes: For helioscopes, light-shining-through-walls, polarimetry, spin/precession, astrophysical propagation, or cosmological data, record the analogous source flux, production model, path length, momentum mismatch, absorption, detector response, exposure, backgrounds, transfer functions, and coherence condition. Do not transplant a haloscope apparatus formula across experiment classes.
+
+## Coherent and incoherent regimes
+
+- Coherent object: **Not established.** Say whether coherence refers to the axion field, photon--axion amplitudes, magnetic orientation, plasma structure, resonator response, detector integration, separated conversion regions, or a sky population.
+- Spatial and temporal scales: **Not established.** Derive the adopted de Broglie/ray coherence length and temporal coherence time from the declared distribution. Keep \(1/(m_a\sigma_v)\)-type spatial scales distinct from \(1/(m_a\sigma_v^2)\)-type temporal scales and record order-one and \(2\pi\) factors.
+- Composition rule: **Not established.** State when amplitudes or transfer matrices are composed coherently, when density matrices or probabilities are added incoherently, and which stochastic phases or environmental correlations justify the transition.
+- Detector regime: **Not established.** Compare signal linewidth, instrument bandwidth, integration time, sampling cadence, and scan step. Record whether the analysis resolves individual coherence times, averages many realizations, or assumes stationarity.
+- Phase resets: A reset of a prescribed background phase is not automatically decoherence of a propagated density matrix. Model dephasing explicitly when that distinction matters.
+
+## Approximation failure gates
+
+For every approximation used by the project, record a dimensionless control parameter, an acceptance threshold tied to the target observable, and a fallback calculation.
+
+- Small mixing or perturbation theory fails near large conversion, degeneracy, secular growth, repeated coherent passages, or when a neglected channel contributes at the observable error scale.
+- Two-level, isolated-resonance, rotating-wave, stationary-phase, or Landau--Zener reductions fail when levels overlap, gradients change across the formation region, endpoint phases matter, the medium is lossy, or crossings cannot be separated in a common basis.
+- WKB/ray and adiabatic treatments fail near turning points, strong gradients, wavelengths comparable to environmental scales, nonlocal response, mode reflection, or rapid basis rotation.
+- Homogeneous-domain and random-domain models fail when density and magnetic statistics are correlated, the domain size is imposed numerically rather than physically, or a small number of structures dominates the line of sight.
+- Classical-field, Gaussian, stationary, ergodic, and Maxwellian assumptions fail for low occupation, transient substructure, coherent streams, non-Gaussian fields, short observations, or selection-conditioned data.
+- Narrow-band, narrow-width, resolved-mode, and high-\(Q\) approximations fail when detuning, scan steps, signal width, mode crossings, loss, or time variation are comparable to the retained bandwidth.
+- Unit conversions and literature recasts fail when electromagnetic conventions, coupling normalizations, abundance scalings, likelihood semantics, or confidence constructions do not match.
+
+## Constraint applicability and provenance
+
+- For every imported bound, record the exact release or primary source, model and coupling assumptions, mass range, cosmological/astrophysical population, nuisance treatment, confidence semantics, and whether the project uses the likelihood, a table, or digitized graphics.
+- Keep direct laboratory limits, astrophysical energy-loss bounds, propagation bounds, cosmological abundance constraints, model bands, and forecasts visually and semantically distinct.
+- Treat environmental profiles and halo models as uncertain inputs, not universal constants. Preserve covariance and bracket alternatives when they can change the conclusion.
+- Label evidence as inherited, source-verified, locally verified, conditional, diagnostic, forecast, open, or superseded. A passed numerical test validates an implementation claim, not automatically the environmental model or phenomenological conclusion.
+
+## Verification and prior-knowledge loading
+
+Before retaining a quantitative result:
+
+1. Reconstruct it from the declared units, coupling normalization, initial state, population, environment, apparatus, and statistical semantics.
+2. Check dimensions, signs, zero-coupling/zero-field limits, probability or density-matrix properties, and at least one analytic or published benchmark.
+3. Separate numerical error from physical-input and statistical uncertainty. Stop numerical refinement when it cannot change the observable decision, and redirect to the dominant uncertainty.
+4. Test the nearest approximation boundary and document the fallback used when the gate fails.
+5. Preserve the chain from source release or theory input through processed data, code, figures, manuscript values, and likelihood output.
+
+Useful safeguards inherited from mature photon--ALP propagation work are: propagate the full state when polarization or coherence matters; keep temporal coherence, ray spatial coherence, magnetic domains, and detector averaging distinct; compose amplitudes only in a common basis with controlled phases; and do not promote a local conversion diagnostic into an experimental or sky constraint without the intervening population, response, and likelihood layers.
+
+## Evidence boundary
+
+No numerical constant, benchmark model, exclusion, sensitivity, or conclusion is established by this profile. Link each filled entry and retained result to a primary source, derivation, code path, data release, or executable verification artifact. Record `Not established` and the route needed to establish it when evidence is unavailable.
+
+## Bibliography compatibility
+
+`paper/references.bib` accepts BibLaTeX fields. The default portable RevTeX 4.2 build uses BibTeX with `apsrev4-2`; review compatibility before adding BibLaTeX-only entry types.

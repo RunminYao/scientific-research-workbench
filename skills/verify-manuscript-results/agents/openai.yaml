@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Manuscript Results"
+  short_description: "Formalize symbolic and numerical paper checks"
+  default_prompt: "Use $verify-manuscript-results to create and run reproducible checks for this paper."

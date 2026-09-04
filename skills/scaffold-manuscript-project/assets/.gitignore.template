@@ -1,0 +1,29 @@
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*Notes.bib
+build/
+
+# Local environments, calculation outputs, and caches
+env/
+.venv/
+scratch/
+verification/output/
+.cache/
+.matplotlib-cache/
+__pycache__/
+*.py[cod]
+
+# Editor and operating-system noise
+*~
+*.swp
+.DS_Store

@@ -1,0 +1,141 @@
+# {{PROJECT_NAME}} Scientific Research and Manuscript Guide
+
+This file is the cold-start routing contract for the repository. Explicit user instructions, primary literature, active derivations, TeX, calculation source, configurations, and executable verification take precedence over summaries. Guidance must follow those sources when they change.
+
+## Scope and entry points
+
+- Repository root: `.`
+- Active root TeX: `{{TEX_ROOT}}`
+- Manuscript context: `{{CONTEXT_FILE}}`
+- Active bibliography: `{{BIB_FILE}}`
+- Research plan: `RESEARCH_PLAN.md`
+- Scientific result index: `SCIENTIFIC_PROGRESS.md`
+- Project orientation: `$orient-scientific-project`
+- Citation rationale: `CITATION_PLAN.md`
+- Documentation map: `docs/README.md`
+- Environment contract: `docs/ENVIRONMENT.md`
+- Calculation promotion path: `calculations/README.md`
+- Configuration contract: `configs/README.md`
+- Verification entry point: `verification/verify_all.py`
+- Machine-readable manifest: `manuscript-project.toml`
+- Scaffold profile: `{{PROFILE_NAME}}`
+- Profile convention index: {{PROFILE_CONVENTION_INDEX}}
+
+Keep historical drafts, generated build products, scratch calculations, caches, and alternate implementations separate from active scientific sources.
+
+## Two-hop context protocol
+
+1. Search `SCIENTIFIC_PROGRESS.md` by concept, result key, calculation, or intended claim.
+2. Load the one matching packet under `docs/context/`, then inspect one linked primary source, derivation, calculation, configuration, or verifier.
+3. Load a second packet only when the first exposes a genuine dependency.
+4. Read `RESEARCH_PLAN.md` for priorities or task design, `{{CONTEXT_FILE}}` for manuscript work, and `CITATION_PLAN.md` for literature or bibliography work. Do not load them by default for unrelated tasks.
+5. Classify each operative statement as `inherited`, project-local `verified`, `conditional`, `diagnostic`, `open/blocked`, or `superseded`.
+6. Treat chronological discussion and generated outputs as routing or hypothesis records, never as primary evidence.
+
+Topic routes:
+
+{{ROOT_PACKET_INDEX}}
+
+## Project orientation and research notices
+
+Use `$orient-scientific-project` when a user needs the current mainline, consequential results, stopped routes, or prerequisite background explained, or when Codex or a subagent needs a cold-start task brief or a check against local-context fixation. Reconstruct the answer through the two-hop evidence route above; orientation is navigation, not a replacement for scientific sources or verification.
+
+{{RESEARCH_NOTICE_GUIDANCE}}
+
+## Project overview
+
+Replace this paragraph with a compact, self-contained account of the scientific system, central mechanism or method, target regime and observable, and the decision the project is intended to support. Explain why the project is distinct from its antecedent work. Do not assume that a future session has read the title or initialization conversation.
+
+## Scientific inheritance and project gap
+
+Replace this section after reading relevant scientific content, not only source titles or root wrappers. For each major antecedent source or existing calculation, state:
+
+- its scientific role and the problem it solved;
+- the result, equation, benchmark, code, or interpretation inherited here;
+- its assumptions and validity domain;
+- what can be reused directly and what still requires local implementation validation;
+- why that completed result is not itself this project's new research question.
+
+Then state:
+
+- **Results established locally:** Describe completed derivations, computations, or manuscript conclusions, or write `Not established`.
+- **New project gap:** Name the specific new ingredient, regime, observable, or evidence gap.
+- **Reopen conditions:** Name violated assumptions or contradictory evidence that would require revisiting inherited work.
+
+Do not turn benchmark reproduction, a methodological caution, or a completed antecedent classification into a primary objective.
+
+For an out-of-tree antecedent, declare its mutability and reuse boundaries. Treat it as a read-only scientific dependency unless edits are explicitly authorized, and do not silently vendor it or register its expensive workflows as local defaults.
+
+## Profile conventions
+
+{{PROFILE_CONVENTION_BLOCK}}
+
+## Scientific invariants
+
+- Before interpreting a result, name the mathematical or physical object, conventions, independent variable, boundary or initial data, approximation domain, normalization, and observable.
+- A local relation, matching condition, fit, or implementation smoke test does not by itself determine a global or observable scientific signal.
+- Separate numerical error from physical, model, data, and statistical uncertainty.
+- Average amplitudes, states, samples, or observables only according to an explicit physical or statistical model; numerical quadrature and truncation are not decoherence or uncertainty.
+- A pole, optimum, or small residual does not establish a large observable effect. Report the residue, sensitivity, degeneracy, or decision-relevant response as appropriate.
+- Generated plots, arrays, PDFs, caches, and checkpoints are never scientific evidence inputs by default.
+- Do not add an observational, population, sensitivity, or constraint statement until the applicable source, environment, response, averaging, covariance, selection, and nuisance semantics are explicit.
+
+## Research workflow
+
+Use `$orient-scientific-project`, `$explore-scientific-ideas`, `$research-scientific-literature`, `$derive-scientific-results`, `$implement-scientific-computations`, `$manage-manuscript-citations`, `$verify-manuscript-results`, and `$edit-scientific-manuscripts` according to the scientific question. These skills are available routes, not a required sequence. Work may remain explanatory, exploratory, analytic, literature-based, computational, or manuscript-focused when that directly answers the question.
+
+Use `$calibrate-scientific-evidence` when physical and mathematical routes diverge, when direct calculation, analytic estimation, formal proof, or infrastructure work must be reranked, or before a third consecutive same-branch milestone that has not changed an observable, tested a decisive assumption, or discriminated a regime; keep mathematical and physical routes independent unless an explicit observable bridge makes one a prerequisite for the other.
+
+Prefer answering the scientific question directly over creating repository artifacts. Create or update durable artifacts only when they preserve evidence, support reuse, or record a decision that will matter later. Update `RESEARCH_PLAN.md` only when the central question, candidate ordering, hypothesis, or durable decision changes; update topic packets and `SCIENTIFIC_PROGRESS.md` only when their scientific status or routing actually changes.
+
+## Computation, configuration, and verification
+
+Follow project-declared resource guards for long or high-memory work. During adoption, preserve established guard commands and thresholds; when none are declared, estimate resources before escalating and do not invent project-specific limits.
+
+The `calculations/{core,models,workflows,cli}` tree is a promotion path, not a requirement to fill layers. Keep cheap exploratory scripts under ignored `scratch/` while equations or observables are unsettled. Promote stable work using dependency direction `cli -> workflows -> models/core`; keep `core` independent of project models and interfaces.
+
+Match configuration and verification effort to the strength, reuse, and decision relevance of the claim. Exploratory reasoning and scratch calculations may keep inputs and assumptions locally without a full configuration or verification stack. When inputs become reusable or support a promoted claim, create an active configuration that defines their scientific object, units, schema, boundaries, controls, provenance, and observable tolerances. Changed scientific inputs must invalidate incompatible checkpoints.
+
+Unit tests may check implementation behavior. A promoted derived, numerical, or otherwise executable project-level scientific claim needs a focused `verification/verify_*.py` script that recomputes the named identity or benchmark from active inputs and fails nonzero with an actionable residual or predicate. Literature and conceptual claims instead retain their appropriate source, argument, assumptions, and validity limits. Keep online source checks separate from default verification.
+
+## Manuscript and bibliography guidance
+
+- Recover include order from `{{TEX_ROOT}}` before editing a section.
+- Read only the relevant manuscript context and topic packet, then inspect the source or verifier.
+- Preserve equations, labels, citations, notation, numerical values, caveats, and validity domains unless the task explicitly changes them.
+- Manuscript drafting may precede verification when provisional statements are labeled clearly. Do not present a derived or numerical statement as established until its evidence and validity limits are adequate.
+- Treat section files as integration targets; their existence is not claim evidence.
+- Verify DOI/arXiv identity and source-to-claim rationale in `CITATION_PLAN.md` before adding an entry to `{{BIB_FILE}}`.
+
+The discovered include order is:
+
+{{INCLUDE_MAP}}
+
+Replace the bare map in `{{CONTEXT_FILE}}` with each file's scientific role, definitions, dependencies, and evidence status.
+
+## Cross-artifact rules
+
+- Review only artifacts that may actually be affected; review does not imply that every related file must be edited.
+- A change to the central question, candidate ranking, or stop condition requires review of the applicable entries in `RESEARCH_PLAN.md`, `SCIENTIFIC_PROGRESS.md`, and the matching packet.
+- A change to include structure, section responsibilities, or claim status requires review of the affected parts of `{{CONTEXT_FILE}}` and `manuscript-project.toml`.
+- A change to conventions, units, fields, boundary data, likelihood semantics, or canonical notation requires review of the affected profile guidance, derivations, configuration, code inputs, and TeX.
+- An established numerical claim requires a fresh-input verifier for the named object; a plot, cached array, or successful smoke test is insufficient.
+- A new citation requires review of `CITATION_PLAN.md`; a new generated figure or table requires its source, declared outputs, input route, and verification boundary.
+
+## Build and validation
+
+From the repository root:
+
+```bash
+{{PROJECT_PYTHON}} verification/verify_all.py
+{{LATEX_BUILD_COMMAND}}
+git diff --check
+```
+
+{{ADAPTER_GUIDANCE}}
+
+Review every registered command before execution. Passing these commands validates structure and implementation contracts only to the extent stated by each verifier.
+
+## Initialization completion standard
+
+Before treating this guide as initialized, confirm that a new session can recover the objective, inherited results, new gap, active-source roles, validity boundaries, and next decisive task from `AGENTS.md`, `SCIENTIFIC_PROGRESS.md`, `RESEARCH_PLAN.md`, and `{{CONTEXT_FILE}}` without access to the initialization conversation. Replace generic scientific prompts; when information is unavailable, record `Not established` and the check needed to establish it.

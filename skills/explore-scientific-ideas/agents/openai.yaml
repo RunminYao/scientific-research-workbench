@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explore Scientific Ideas"
+  short_description: "Turn scientific ideas into testable next steps"
+  default_prompt: "Use $explore-scientific-ideas to examine this idea, separate assumptions from evidence, and identify the next decisive result."

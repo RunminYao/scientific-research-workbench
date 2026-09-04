@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edit Scientific Manuscripts"
+  short_description: "Edit papers and synchronize related artifacts"
+  default_prompt: "Use $edit-scientific-manuscripts to revise this paper and audit dependent manuscript files."

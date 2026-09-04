@@ -1,0 +1,3 @@
+(* Reviewable wolframscript adapter. Replace the placeholder identity. *)
+residual = FullSimplify[(x + 1)^2 - (x^2 + 2 x + 1)];
+If[TrueQ[residual === 0], Print["PASS: placeholder residual" ]; Exit[0], Print["FAIL: ", residual]; Exit[1]];

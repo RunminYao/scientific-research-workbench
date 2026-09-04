@@ -1,0 +1,54 @@
+"""Shared helpers for project-local manuscript verification."""
+
+from __future__ import annotations
+
+import math
+from typing import Any
+
+
+CHECKS: list[str] = []
+
+
+def check_close(
+    name: str,
+    actual: float,
+    expected: float,
+    *,
+    abs_tol: float,
+    rel_tol: float = 0.0,
+) -> None:
+    """Assert finite numerical agreement with explicit tolerances."""
+    if not all(math.isfinite(value) for value in (actual, expected, abs_tol, rel_tol)):
+        raise AssertionError(f"{name}: values and tolerances must be finite")
+    if abs_tol < 0 or rel_tol < 0:
+        raise AssertionError(f"{name}: tolerances must be nonnegative")
+    error = abs(actual - expected)
+    limit = max(abs_tol, rel_tol * max(abs(actual), abs(expected)))
+    if error > limit:
+        raise AssertionError(
+            f"{name}: actual={actual:.16g}, expected={expected:.16g}, "
+            f"error={error:.6g}, tolerance={limit:.6g}"
+        )
+    CHECKS.append(name)
+
+
+def check_symbolic_zero(name: str, expression: Any) -> None:
+    """Assert that a SymPy scalar or matrix simplifies componentwise to zero."""
+    try:
+        import sympy as sp
+    except ImportError as exc:
+        raise RuntimeError("SymPy is required for symbolic checks") from exc
+    values = list(expression) if isinstance(expression, sp.MatrixBase) else [expression]
+    residuals = [sp.factor(sp.simplify(value)) for value in values]
+    nonzero = [value for value in residuals if value != 0]
+    if nonzero:
+        raise AssertionError(f"{name}: nonzero residuals: {nonzero}")
+    CHECKS.append(name)
+
+
+def print_summary() -> None:
+    if not CHECKS:
+        raise AssertionError("no manuscript checks were registered")
+    print(f"PASS: {len(CHECKS)} manuscript checks")
+    for name in CHECKS:
+        print(f"  - {name}")

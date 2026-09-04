@@ -1,0 +1,66 @@
+"""Deterministic, response-blind partitions for complete named node grids."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Mapping
+
+
+@dataclass(frozen=True)
+class ChunkRange:
+    label: str
+    ranges: tuple[tuple[str, int, int], ...]
+
+    def for_grid(self, name: str) -> tuple[int, int] | None:
+        for grid, start, stop in self.ranges:
+            if grid == name:
+                return (start, stop) if start < stop else None
+        raise KeyError(name)
+
+
+def build_chunk_plan(
+    *, node_counts: Mapping[str, int], chunk_sizes: Mapping[str, int],
+) -> tuple[ChunkRange, ...]:
+    """Partition every declared grid exactly once without inspecting responses."""
+    if not node_counts or set(node_counts) != set(chunk_sizes):
+        raise ValueError("node counts and chunk sizes require the same nonempty grid names")
+    if any(not name or count <= 0 for name, count in node_counts.items()):
+        raise ValueError("grid names must be nonempty and node counts positive")
+    if any(size <= 0 for size in chunk_sizes.values()):
+        raise ValueError("chunk sizes must be positive")
+    names = tuple(sorted(node_counts))
+    chunk_count = max(
+        (node_counts[name] + chunk_sizes[name] - 1) // chunk_sizes[name]
+        for name in names
+    )
+    width = max(3, len(str(chunk_count - 1)))
+    rows: list[ChunkRange] = []
+    for ordinal in range(chunk_count):
+        ranges = []
+        for name in names:
+            start = min(ordinal * chunk_sizes[name], node_counts[name])
+            stop = min(start + chunk_sizes[name], node_counts[name])
+            ranges.append((name, start, stop))
+        rows.append(ChunkRange(f"{ordinal:0{width}d}", tuple(ranges)))
+    return tuple(rows)
+
+
+def validate_exact_coverage(
+    plan: tuple[ChunkRange, ...], *, node_counts: Mapping[str, int],
+) -> None:
+    """Reject gaps, overlaps, duplicate labels, unknown grids, or out-of-order ranges."""
+    if not plan:
+        raise ValueError("chunk plan must not be empty")
+    if len({row.label for row in plan}) != len(plan):
+        raise ValueError("chunk labels must be unique")
+    expected_names = set(node_counts)
+    cursors = {name: 0 for name in expected_names}
+    for row in plan:
+        if {name for name, _, _ in row.ranges} != expected_names:
+            raise ValueError(f"chunk {row.label!r} has an inconsistent grid set")
+        for name, start, stop in row.ranges:
+            if start != cursors[name] or not start <= stop <= node_counts[name]:
+                raise ValueError(f"grid {name!r} is not contiguous at chunk {row.label!r}")
+            cursors[name] = stop
+    if cursors != dict(node_counts):
+        raise ValueError(f"chunk plan does not cover every node exactly once: {cursors}")

@@ -1,0 +1,40 @@
+{
+  "name": "scientific-research-workbench",
+  "version": "0.5.0",
+  "description": "Evidence-aware workflows for scientific project orientation, claim calibration, exploration, computation, verification, and reproducible LaTeX manuscripts.",
+  "author": {
+    "name": "RunminYao"
+  },
+  "homepage": "https://github.com/RunminYao/scientific-research-workbench",
+  "repository": "https://github.com/RunminYao/scientific-research-workbench",
+  "license": "Apache-2.0",
+  "keywords": [
+    "latex",
+    "scientific-writing",
+    "scientific-research",
+    "bibliography",
+    "reproducibility",
+    "research-context",
+    "research-orientation",
+    "evidence-provenance",
+    "numerical-methods",
+    "symbolic-verification"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Scientific Research Workbench",
+    "shortDescription": "Research, compute, and write reproducible science.",
+    "longDescription": "Orient users and agents within complex scientific projects, calibrate physical, mathematical, and implementation claims, explore ideas, research focused literature questions, derive and implement results, manage bounded evidence context and restartable calculations, then scaffold, cite, verify, and edit reproducible LaTeX manuscripts.",
+    "developerName": "RunminYao",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Orient me to this scientific project's evidence-backed mainline, then identify the next decisive result.",
+      "Separate physical claims, mathematical theorems, and implementation checks, then choose the smallest decisive research route.",
+      "Research, derive, implement, or verify this focused scientific question."
+    ]
+  }
+}

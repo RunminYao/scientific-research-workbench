@@ -1,0 +1,17 @@
+# Scientific Configuration Contract
+
+No active scientific configuration is registered by this scaffold.
+
+Scratch calculations may keep local inputs beside the exploratory code while their scientific object or reuse boundary is unsettled. Create a versioned configuration when inputs become reusable across calculations or runs, need shared review, or support a promoted claim. At that point document:
+
+- a named mathematical or physical object and evolution, inference, or data problem;
+- explicit units, conventions, and normalization;
+- a schema with required fields, types, admissible ranges, and cross-field constraints;
+- declared boundary or initial data, model choices, cutoffs, and solver controls;
+- observable-level tolerances and convergence or acceptance predicates;
+- provenance for every imported scientific input;
+- a rule separating baseline, stress, validation, and exploratory choices.
+
+Configuration files are scientific inputs, not dumps of command-line defaults. A changed configuration must invalidate incompatible checkpoints and generated products. A filename such as `baseline` or `fiducial` does not establish that its choices are authoritative.
+
+When the first active configuration is created, document its schema, version, consumers, validation command, and change policy here. Register claim-bearing configuration paths under `verification.inputs` in `manuscript-project.toml`.

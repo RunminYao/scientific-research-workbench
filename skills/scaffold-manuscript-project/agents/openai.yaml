@@ -1,0 +1,6 @@
+interface:
+  display_name: "Scaffold Manuscript Project"
+  short_description: "Create a complete evidence-aware manuscript workspace"
+  default_prompt: "Use $scaffold-manuscript-project to preview and initialize or adopt a unified scientific research and manuscript workspace."
+policy:
+  allow_implicit_invocation: true

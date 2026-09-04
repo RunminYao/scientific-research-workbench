@@ -1,0 +1,4 @@
+"""Scientific equations, conventions, units, and parameterization.
+
+Models may use core primitives but should not depend on workflows or command-line code.
+"""

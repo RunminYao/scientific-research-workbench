@@ -1,0 +1,30 @@
+# {{PROJECT_NAME}} Project Overview
+
+## Load when
+
+Load this packet for the central project question, initial evidence boundary, or first active research gap.
+
+## Established results
+
+- `open/blocked`: No source-backed inherited result or verified local result has yet been summarized for this project.
+
+## Limits and non-claims
+
+- The existence of manuscript sections, calculation packages, configurations, plots, or passing structural tests does not establish a scientific prediction or interpretation.
+
+## Rejected or superseded routes
+
+- None registered. Preserve only routes whose scope and failure reason will prevent a repeated mistake.
+
+## Evidence routes
+
+- Active manuscript: `{{TEX_ROOT}}`
+- Manuscript context: `{{CONTEXT_FILE}}`
+- Bibliography: `{{BIB_FILE}}`
+- Citation rationale: `CITATION_PLAN.md`
+- Research roadmap: `RESEARCH_PLAN.md`
+- Verification manifest: `manuscript-project.toml`
+
+## Active gap
+
+- Establish the smallest source check, derivation, computation, or validation result that would change the current research decision.

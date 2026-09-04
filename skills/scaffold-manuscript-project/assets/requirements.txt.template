@@ -1,0 +1,4 @@
+# Complete default research environment.
+-r requirements-runtime.txt
+-r requirements-verification.txt
+-r requirements-plot.txt

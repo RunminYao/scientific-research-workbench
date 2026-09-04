@@ -1,0 +1,38 @@
+# Calculation Architecture
+
+This package is a promotion path for durable scientific computation. Its presence does not mean a solver, model, workflow, or local scientific result exists.
+
+## Dependency direction
+
+Use `cli -> workflows -> models/core`:
+
+- `core/` contains domain-light numerical and runtime primitives only after they have stable tests and a clear reusable role;
+- `models/` contains scientific equations, conventions, units, parameterization, and convention-bearing data structures;
+- `workflows/` composes models and core primitives into reproducible benchmarks, scans, inference steps, or observable extraction;
+- `cli/` parses user inputs and delegates to workflows without containing scientific logic.
+
+Exploratory scripts may remain flat under ignored `scratch/` while equations, state definitions, or output objects are unsettled. Do not promote a file merely to fill this layout.
+
+## Promotion gate
+
+Before promotion, name:
+
+1. the scientific object and target observable;
+2. conventions, units, boundary or initial data, and approximation domain;
+3. required configuration schema and provenance;
+4. numerical method, diagnostics, and failure predicates;
+5. tolerance or convergence criteria tied to the scientific decision;
+6. independent limiting cases or benchmarks;
+7. the manuscript or verification consumer.
+
+Put focused derivation notes under `docs/derivations/`. Move executable logic here only when it has a stable interface and consumer.
+
+## Output and cache boundary
+
+Generated curves, tables, checkpoints, and scratch arrays belong under ignored `scratch/` or `verification/output/`. They are never verification inputs by default. A reusable workflow must bind its scientific inputs, record code and configuration provenance, reject incompatible resumes, and aggregate complete data before normalization or interpretation.
+
+Register a generated manuscript figure or table in `manuscript-project.toml` with one source and an explicit output list. The registration records provenance; it does not establish the output's scientific correctness.
+
+## Testing boundary
+
+Unit tests may test implementation behavior. A scientific verifier must recompute a named identity, limiting case, benchmark, or convergence decision from active inputs with explicit tolerances. Passing imports or a smoke run does not establish a scientific result.

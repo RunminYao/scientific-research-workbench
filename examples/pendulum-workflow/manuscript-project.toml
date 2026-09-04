@@ -1,0 +1,16 @@
+[manuscript]
+root_tex = "manuscript/main.tex"
+bibliography = ""
+context_docs = ["README.md", "derivation.md"]
+
+[verification]
+default = [
+  ["python3", "compute_period.py"],
+  ["python3", "verify_period.py"],
+]
+online = []
+inputs = ["compute_period.py", "verify_period.py", "derivation.md", "manuscript/main.tex"]
+packages = []
+provenance_python = "python3"
+seeds = {}
+cache_policy = "fresh deterministic standard-library calculation"

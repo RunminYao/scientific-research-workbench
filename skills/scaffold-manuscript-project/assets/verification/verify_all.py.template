@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Run the explicitly reviewed repository-local verification suite."""
+
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+HERE = Path(__file__).resolve().parent
+# Add a project verifier here only after reviewing its inputs, side effects,
+# determinism, and claim boundary. Online checks are never part of this
+# default orchestrator. Adapter checks such as verify_sympy.py are registered
+# separately in manuscript-project.toml when selected.
+VERIFIERS = (
+    "verify_context_architecture.py",
+)
+
+
+def main() -> int:
+    for name in VERIFIERS:
+        if (
+            Path(name).name != name
+            or not name.startswith("verify_")
+            or not name.endswith(".py")
+            or name == "verify_all.py"
+            or name.startswith("verify_online_")
+        ):
+            print(f"ERROR: unsafe verifier allowlist entry: {name!r}", file=sys.stderr)
+            return 2
+        script = (HERE / name).resolve()
+        try:
+            script.relative_to(HERE.resolve())
+        except ValueError:
+            print(f"ERROR: verifier escapes verification directory: {name}", file=sys.stderr)
+            return 2
+        if not script.is_file():
+            print(f"ERROR: reviewed verifier is missing: {name}", file=sys.stderr)
+            return 2
+        print(f"\n==> {name}", flush=True)
+        result = subprocess.run([sys.executable, str(script)], check=False)
+        if result.returncode:
+            return result.returncode
+    print("\nPASS: all project verifications")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

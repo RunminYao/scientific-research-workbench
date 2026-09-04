@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath}
+\title{Verified finite-amplitude pendulum period}
+\author{Workflow example}
+\begin{document}
+\maketitle
+For a point mass on a rigid, massless rod without damping, the period at peak angle
+\(\theta_0\) is
+\begin{equation}
+  T=T_0\left(1+\frac{\theta_0^2}{16}+\frac{11\theta_0^4}{3072}
+  +O(\theta_0^6)\right),\qquad T_0=2\pi\sqrt{L/g}.
+\end{equation}
+At \(L=1\,\mathrm{m}\), \(g=9.81\,\mathrm{m\,s^{-2}}\), and
+\(\theta_0=0.2\,\mathrm{rad}\), an independent arithmetic--geometric-mean check
+finds that the fourth-order expansion has relative error below \(10^{-7}\), while
+the numerical quadrature agrees with that reference below \(10^{-11}\).
+These tolerances were checked only at the stated amplitude. The expansion is not
+claimed to be accurate for large amplitude or near the separatrix
+\(\theta_0=\pi\).
+\end{document}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Scientific Computations"
+  short_description: "Build observable-driven scientific computations"
+  default_prompt: "Use $implement-scientific-computations to implement the smallest calculation that answers this scientific question, with an observable-level error budget and a conclusion-based stopping rule."

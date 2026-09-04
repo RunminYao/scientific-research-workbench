@@ -1,0 +1,4 @@
+"""Reproducible research tasks composed from models and core primitives.
+
+Keep input orchestration and output assembly here while leaving argument parsing to cli.
+"""

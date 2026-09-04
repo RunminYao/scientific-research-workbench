@@ -1,0 +1,240 @@
+"""Atomic, scientific-input-bound checkpoints for independent numerical nodes."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import tempfile
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any
+
+
+CHECKPOINT_SCHEMA_VERSION = "scientific-node-checkpoint-v1"
+
+
+class CheckpointError(RuntimeError):
+    """A checkpoint is malformed, incomplete, or bound to different inputs."""
+
+
+def canonical_json_bytes(value: object) -> bytes:
+    try:
+        return json.dumps(
+            value, sort_keys=True, separators=(",", ":"), ensure_ascii=True,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise CheckpointError("scientific inputs must be canonical JSON data") from exc
+
+
+def scientific_input_fingerprint(inputs: Mapping[str, Any]) -> str:
+    return hashlib.sha256(canonical_json_bytes(dict(inputs))).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def atomic_write(path: Path, payload: bytes) -> None:
+    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def exclusive_write(path: Path, payload: bytes) -> bool:
+    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.link(temporary, path)
+        except FileExistsError:
+            return False
+        return True
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+class NodeCheckpointStore:
+    """Persist independent JSON or NumPy-array nodes under one immutable input manifest."""
+
+    def __init__(self, directory: Path) -> None:
+        self.directory = directory
+        self.directory.mkdir(parents=True, exist_ok=True)
+        self._fingerprint: str | None = None
+
+    @property
+    def manifest_path(self) -> Path:
+        return self.directory / "checkpoint-manifest.json"
+
+    def initialize(self, *, inputs: Mapping[str, Any]) -> str:
+        normalized = dict(inputs)
+        fingerprint = scientific_input_fingerprint(normalized)
+        record = {
+            "schema_version": CHECKPOINT_SCHEMA_VERSION,
+            "scientific_input_fingerprint": fingerprint,
+            "scientific_inputs": normalized,
+        }
+        payload = canonical_json_bytes(record) + b"\n"
+        if self.manifest_path.exists():
+            try:
+                existing = json.loads(self.manifest_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                raise CheckpointError(f"cannot read {self.manifest_path}") from exc
+            if existing != record:
+                raise CheckpointError(
+                    "checkpoint scientific inputs differ; refusing changed-input resume"
+                )
+        elif not exclusive_write(self.manifest_path, payload):
+            return self.initialize(inputs=normalized)
+        self._fingerprint = fingerprint
+        return fingerprint
+
+    def _require_fingerprint(self) -> str:
+        if self._fingerprint is None:
+            raise CheckpointError("initialize scientific inputs before loading or saving nodes")
+        return self._fingerprint
+
+    def _base(self, node: str | int | float) -> Path:
+        identity = json.dumps(node, sort_keys=True, separators=(",", ":"))
+        digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()
+        return self.directory / f"node-{digest}"
+
+    def _validate(self, record: object, node: str | int | float, kind: str) -> dict[str, Any]:
+        fingerprint = self._require_fingerprint()
+        if not isinstance(record, dict):
+            raise CheckpointError("checkpoint metadata is not an object")
+        required = {
+            "schema_version": CHECKPOINT_SCHEMA_VERSION,
+            "node_identity": node,
+            "scientific_input_fingerprint": fingerprint,
+            "payload_kind": kind,
+        }
+        if any(record.get(key) != value for key, value in required.items()):
+            raise CheckpointError(f"checkpoint does not match node or inputs: {node!r}")
+        return record
+
+    def save(self, node: str | int | float, result: Any) -> Path:
+        fingerprint = self._require_fingerprint()
+        result_payload = canonical_json_bytes(result)
+        record = {
+            "schema_version": CHECKPOINT_SCHEMA_VERSION,
+            "node_identity": node,
+            "scientific_input_fingerprint": fingerprint,
+            "payload_kind": "json",
+            "payload_sha256": hashlib.sha256(result_payload).hexdigest(),
+            "result": result,
+        }
+        path = self._base(node).with_suffix(".json")
+        atomic_write(path, canonical_json_bytes(record) + b"\n")
+        return path
+
+    def load(self, node: str | int | float) -> Any | None:
+        self._require_fingerprint()
+        path = self._base(node).with_suffix(".json")
+        if not path.exists():
+            return None
+        try:
+            record = self._validate(json.loads(path.read_text(encoding="utf-8")), node, "json")
+        except (OSError, json.JSONDecodeError) as exc:
+            raise CheckpointError(f"cannot read {path}") from exc
+        if "result" not in record:
+            raise CheckpointError(f"checkpoint lacks a JSON result: {path}")
+        digest = hashlib.sha256(canonical_json_bytes(record["result"])).hexdigest()
+        if digest != record.get("payload_sha256"):
+            raise CheckpointError(f"checkpoint JSON payload hash mismatch: {path}")
+        return record["result"]
+
+    def save_arrays(
+        self, node: str | int | float, arrays: Mapping[str, Any], *, metadata: Any = None,
+    ) -> Path:
+        import numpy as np
+
+        fingerprint = self._require_fingerprint()
+        values = {str(name): np.asarray(value) for name, value in arrays.items()}
+        if not values or any(not name or value.dtype.hasobject for name, value in values.items()):
+            raise CheckpointError("array checkpoints require named non-object numerical arrays")
+        payload_path = self._base(node).with_suffix(".npz")
+        descriptor, temporary_name = tempfile.mkstemp(
+            prefix=f".{payload_path.name}.", suffix=".npz", dir=self.directory,
+        )
+        os.close(descriptor)
+        temporary = Path(temporary_name)
+        try:
+            np.savez_compressed(temporary, **values)
+            with temporary.open("rb") as handle:
+                os.fsync(handle.fileno())
+            os.replace(temporary, payload_path)
+        finally:
+            temporary.unlink(missing_ok=True)
+        record = {
+            "schema_version": CHECKPOINT_SCHEMA_VERSION,
+            "node_identity": node,
+            "scientific_input_fingerprint": fingerprint,
+            "payload_kind": "npz_array",
+            "payload_filename": payload_path.name,
+            "payload_sha256": sha256_file(payload_path),
+            "arrays": {
+                name: {"dtype": value.dtype.str, "shape": list(value.shape)}
+                for name, value in sorted(values.items())
+            },
+            "metadata": metadata,
+            "metadata_sha256": hashlib.sha256(canonical_json_bytes(metadata)).hexdigest(),
+        }
+        metadata_path = self._base(node).with_suffix(".array.json")
+        atomic_write(metadata_path, canonical_json_bytes(record) + b"\n")
+        return metadata_path
+
+    def load_arrays(self, node: str | int | float) -> tuple[dict[str, Any], Any] | None:
+        import numpy as np
+
+        self._require_fingerprint()
+        metadata_path = self._base(node).with_suffix(".array.json")
+        if not metadata_path.exists():
+            return None
+        try:
+            record = self._validate(
+                json.loads(metadata_path.read_text(encoding="utf-8")), node, "npz_array",
+            )
+        except (OSError, json.JSONDecodeError) as exc:
+            raise CheckpointError(f"cannot read {metadata_path}") from exc
+        payload_path = self._base(node).with_suffix(".npz")
+        if record.get("payload_filename") != payload_path.name or not payload_path.is_file():
+            raise CheckpointError(f"array checkpoint payload is incomplete: {payload_path}")
+        if sha256_file(payload_path) != record.get("payload_sha256"):
+            raise CheckpointError(f"array checkpoint payload hash mismatch: {payload_path}")
+        try:
+            with np.load(payload_path, allow_pickle=False) as payload:
+                values = {name: payload[name] for name in payload.files}
+        except (OSError, ValueError) as exc:
+            raise CheckpointError(f"cannot load {payload_path}") from exc
+        expected = record.get("arrays")
+        if not isinstance(expected, dict) or set(values) != set(expected):
+            raise CheckpointError(f"array checkpoint names mismatch: {payload_path}")
+        for name, value in values.items():
+            spec = expected[name]
+            if (
+                not isinstance(spec, dict)
+                or value.dtype.str != spec.get("dtype")
+                or list(value.shape) != spec.get("shape")
+            ):
+                raise CheckpointError(f"array dtype or shape mismatch: {payload_path}")
+        metadata = record.get("metadata")
+        digest = hashlib.sha256(canonical_json_bytes(metadata)).hexdigest()
+        if digest != record.get("metadata_sha256"):
+            raise CheckpointError(f"array metadata hash mismatch: {payload_path}")
+        return values, metadata

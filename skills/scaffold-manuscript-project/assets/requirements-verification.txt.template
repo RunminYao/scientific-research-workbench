@@ -1,0 +1,3 @@
+# Independent derivation, implementation-test, and bibliography-audit dependencies.
+# The generated structural verifier uses only the Python standard library.
+# Add and exactly pin packages only when project-specific verifiers require them.

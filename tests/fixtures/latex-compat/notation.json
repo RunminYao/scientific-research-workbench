@@ -1,0 +1,9 @@
+{
+  "items": [
+    {
+      "name": "energy",
+      "canonical": "E",
+      "definition_patterns": ["energy symbol explicitly"]
+    }
+  ]
+}

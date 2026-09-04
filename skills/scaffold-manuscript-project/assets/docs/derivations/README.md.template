@@ -1,0 +1,27 @@
+# Derivation Index and Evidence Boundary
+
+No project-specific derivation is established by this scaffold.
+
+## When a derivation note helps
+
+Exploratory algebra may remain in the working discussion or under ignored `scratch/`. Create a focused derivation note when preserving the reasoning will support reuse, a durable decision, manuscript integration, a calculation, or verification. The note should identify its scientific object, conventions and assumptions, target result or approximation, and intended consumer.
+
+Each durable note should record:
+
+- the question and decision relevance;
+- definitions, conventions, units, and source equations;
+- assumptions, boundary or initial data, and approximation domain;
+- the derivation with enough intermediate structure to audit signs and factors;
+- limiting cases, dimensions, symmetries, or independent checks;
+- unresolved steps and conditions that would invalidate reuse;
+- links to consuming TeX, code, configuration, and verification.
+
+## Derivation index
+
+| Derivation | Scientific role | Status | Consumers | Verification |
+| --- | --- | --- | --- | --- |
+| None registered | Not established | open/blocked | None | None |
+
+## Evidence boundary
+
+A derivation note can establish an analytic relation within its stated assumptions. It does not by itself validate a numerical implementation, imported physical input, observational model, or manuscript interpretation. Add focused `verification/verify_*.py` scripts when executable identities or benchmarks become reusable or support a promoted project-level claim.

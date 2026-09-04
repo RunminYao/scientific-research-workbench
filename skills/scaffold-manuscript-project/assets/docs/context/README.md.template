@@ -1,0 +1,26 @@
+# Bounded Research Context
+
+This directory holds topic packets for two-hop scientific routing. Search [SCIENTIFIC_PROGRESS.md](../../SCIENTIFIC_PROGRESS.md), load one matching packet, then inspect one linked source, derivation, calculation, configuration, or verifier. Load another packet only when the first exposes a genuine dependency.
+
+## Packet index
+
+{{CONTEXT_PACKET_INDEX}}
+
+Add a packet here and to `manuscript-project.toml` only when it carries a durable result boundary, stopped route, or topic-specific evidence map. Also add the corresponding discovery route to `SCIENTIFIC_PROGRESS.md`.
+
+## Required packet contract
+
+Every packet uses these headings in order:
+
+1. `## Load when`
+2. `## Established results`
+3. `## Limits and non-claims`
+4. `## Rejected or superseded routes`
+5. `## Evidence routes`
+6. `## Active gap`
+
+Use the evidence labels `inherited`, `verified`, `conditional`, `diagnostic`, `open/blocked`, and `superseded` consistently. Packets route to evidence; exact values and scientific assertions remain authoritative only in their active sources and verifiers.
+
+## Maintenance boundary
+
+Update a packet when a durable result, limitation, evidence route, or active gap changes. Update the discovery index only when routing or a stop/go decision changes. When a packet develops distinct loading conditions or evidence boundaries, split it horizontally and route the affected result keys directly from `SCIENTIFIC_PROGRESS.md`; do not add nested indexes by default. Do not use packets as session logs, duplicate derivations, or collections of generated output.

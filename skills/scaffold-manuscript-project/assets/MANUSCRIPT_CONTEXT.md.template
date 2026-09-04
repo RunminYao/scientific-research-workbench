@@ -1,0 +1,70 @@
+# {{PROJECT_NAME}} Manuscript Context Index
+
+This file helps agents navigate the active manuscript. It does not replace reading TeX and must follow the source when structure or scientific narrative changes.
+
+## Active sources
+
+- Root TeX: `{{TEX_ROOT}}`
+- Bibliography: `{{BIB_FILE}}`
+- Research plan: `RESEARCH_PLAN.md`
+- Result index: `SCIENTIFIC_PROGRESS.md`
+- Citation plan: `CITATION_PLAN.md`
+- Profile convention index: {{PROFILE_CONVENTION_INDEX}}
+
+## Include order
+
+{{INCLUDE_MAP}}
+
+## Orientation procedure
+
+1. Recover the current include graph from the root TeX file.
+2. Search every relevant occurrence of a symbol, claim, citation key, equation label, figure, or calculation name.
+3. Read definitions before operative uses and follow dependencies into appendices, derivations, configurations, and verification.
+4. Identify the scientific problem, conventions, assumptions, boundary or initial data, and approximation domain before interpreting a result.
+5. Treat this index as stale when it disagrees with source.
+
+## Narrative spine
+
+Replace this section with a compact account of:
+
+- the manuscript's central question and target observable or result;
+- the inherited scientific foundation and where it is established;
+- the new contribution attempted here;
+- the method and ordered reasoning chain;
+- the principal result and its evidence, or `Not established`;
+- the assumptions and validity boundaries that constrain interpretation.
+
+Do not describe a completed antecedent result as an open objective merely because it requires local implementation validation. Keep broader hypotheses, alternate directions, and decisive pending calculations in `RESEARCH_PLAN.md`.
+
+## Section guide
+
+For each active section, add a subsection recording:
+
+- its role in the manuscript's argument;
+- definitions, conventions, and assumptions introduced there;
+- claims or results currently established there;
+- upstream sections or antecedent sources on which it depends;
+- dependent figures, tables, code, configuration, bibliography entries, and verification;
+- whether the section is substantive, incomplete, or only a scaffold.
+
+Do not use a bare filename or section title as its description.
+
+## Reference and evidence map
+
+Describe each declared antecedent manuscript, external dataset, major code path, configuration, and verification package by scientific role. State what evidence it supplies, what is reused, and what remains project-specific. Paths without role descriptions are insufficient.
+
+## Cross-artifact dependencies
+
+Record which source changes require review of calculations, configurations, figure descriptions, bibliography plans, `AGENTS.md`, result packets, or executable checks. Keep machine-readable rules in `manuscript-project.toml`.
+
+## Claim status and evidence
+
+- When an inherited statement is presented as established, retain its exact antecedent source and assumptions.
+- When a numerical statement is presented as established, link the active calculation and a registered check for the named object; generated outputs and implementation tests are not automatically manuscript evidence.
+- Provisional drafting is allowed when conditional, diagnostic, `open/blocked`, or superseded status and non-claims remain explicit.
+- A literature-dependent established statement records verified source identity and claim-to-source rationale.
+- A population, observational, or constraint claim records the applicable data, averaging, response, covariance, selection, and nuisance treatment.
+
+## Initialization completion standard
+
+Replace generic scientific prompts. A new session should be able to identify where a symbol or claim is defined, which source supports it, whether it is established, and which companion artifact must be reviewed when it changes.

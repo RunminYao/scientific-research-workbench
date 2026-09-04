@@ -1,0 +1,26 @@
+[scaffold]
+profile = "{{PROFILE_NAME}}"
+
+[manuscript]
+root_tex = {{ROOT_TEX_TOML}}
+bibliography = {{BIBLIOGRAPHY_TOML}}
+context_docs = ["AGENTS.md", "SCIENTIFIC_PROGRESS.md"]
+
+{{CONTEXT_CONFIG_TOML}}
+
+[verification]
+default = {{VERIFICATION_COMMANDS_TOML}}
+online = []
+inputs = {{INPUT_PATHS_TOML}}
+packages = []
+provenance_python = {{PROJECT_PYTHON_TOML}}
+seeds = {}
+cache_policy = "Generated outputs and caches are not verification inputs by default; declare any exception with its invalidation and fresh-input validation rule."
+
+[artifacts]
+# Each nonempty entry must be { source = "...", outputs = ["..."] }.
+generated = {{GENERATED_ARTIFACTS_TOML}}
+
+{{PROFILE_TABLES}}
+
+{{SYNC_RULES_TOML}}

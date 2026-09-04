@@ -1,0 +1,5 @@
+"""Scientific calculation package.
+
+Keep exploratory scripts lightweight. Promote durable, reused work into the optional
+core, models, workflows, and cli layers only when those boundaries become useful.
+"""

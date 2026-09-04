@@ -1,0 +1,26 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+.venv/
+venv/
+
+.DS_Store
+
+# LaTeX and committed-example verification outputs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.run.xml
+examples/pendulum-workflow/verification/*.json
+examples/pendulum-workflow/verification/*.xml

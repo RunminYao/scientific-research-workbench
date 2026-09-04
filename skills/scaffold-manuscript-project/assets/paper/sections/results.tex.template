@@ -1,0 +1,9 @@
+\section{Results}
+\label{sec:results}
+
+% Present only source-backed or project-locally verified results. For each
+% value, curve, table, or classification, state the object, inputs, uncertainty
+% or tolerance, approximation domain, and decision relevance.
+%
+% Claim gate: generated plots and cached arrays are outputs, not evidence
+% inputs. Link every quantitative claim to its active workflow and verifier.
